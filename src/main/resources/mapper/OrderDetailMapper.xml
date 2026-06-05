@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.drink.server.mapper.OrderDetailMapper">
+
+    <select id="listByOrderId" resultType="com.drink.server.entity.OrderDetail">
+        SELECT id, order_id, drink_id, drink_name, spec, quantity, price
+        FROM order_detail
+        WHERE order_id = #{orderId}
+    </select>
+
+    <insert id="insertBatch">
+        INSERT INTO order_detail (order_id, drink_id, drink_name, spec, quantity, price) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.orderId}, #{item.drinkId}, #{item.drinkName}, #{item.spec}, #{item.quantity}, #{item.price})
+        </foreach>
+    </insert>
+
+</mapper>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.drink.server.mapper.OrderMapper">
+
+    <select id="pageQuery" resultType="com.drink.server.entity.Order">
+        SELECT o.id, o.user_id, o.order_no, o.amount, o.status, o.pickup_type,
+               o.pickup_no, o.create_time, u.nickname AS user_name
+        FROM `order` o
+        LEFT JOIN user u ON o.user_id = u.id
+        <where>
+            <if test="status != null">
+                AND o.status = #{status}
+            </if>
+            <if test="orderNo != null and orderNo != ''">
+                AND o.order_no LIKE CONCAT('%', #{orderNo}, '%')
+            </if>
+        </where>
+        ORDER BY o.create_time DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM `order` o
+        <where>
+            <if test="status != null">
+                AND o.status = #{status}
+            </if>
+            <if test="orderNo != null and orderNo != ''">
+                AND o.order_no LIKE CONCAT('%', #{orderNo}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getById" resultType="com.drink.server.entity.Order">
+        SELECT id, user_id, order_no, amount, status, pickup_type, pickup_no, create_time
+        FROM `order` WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `order` (user_id, order_no, amount, status, pickup_type, pickup_no)
+        VALUES (#{userId}, #{orderNo}, #{amount}, #{status}, #{pickupType}, #{pickupNo})
+    </insert>
+
+    <update id="updateStatus">
+        UPDATE `order` SET status = #{status} WHERE id = #{id}
+    </update>
+
+    <select id="listByUserId" resultType="com.drink.server.entity.Order">
+        SELECT id, user_id, order_no, amount, status, pickup_type, pickup_no, create_time
+        FROM `order`
+        WHERE user_id = #{userId}
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="todayOverview" resultType="java.util.Map">
+        SELECT
+            COUNT(*) AS todayOrders,
+            IFNULL(SUM(amount), 0) AS todayAmount,
+            SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) AS pendingOrders,
+            SUM(CASE WHEN status = 4 THEN 1 ELSE 0 END) AS completedOrders
+        FROM `order`
+        WHERE DATE(create_time) = CURDATE()
+    </select>
+
+    <select id="recentTrend" resultType="java.util.Map">
+        SELECT
+            DATE_FORMAT(create_time, '%m-%d') AS date,
+            IFNULL(SUM(amount), 0) AS amount,
+            COUNT(*) AS count
+        FROM `order`
+        WHERE create_time >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+          AND status != 5
+        GROUP BY DATE_FORMAT(create_time, '%m-%d')
+        ORDER BY date ASC
+    </select>
+
+    <select id="topDrinks" resultType="java.util.Map">
+        SELECT od.drink_name AS drinkName, SUM(od.quantity) AS count
+        FROM order_detail od
+        INNER JOIN `order` o ON od.order_id = o.id
+        WHERE o.status = 4
+        GROUP BY od.drink_name
+        ORDER BY count DESC
+        LIMIT 5
+    </select>
+
+</mapper>

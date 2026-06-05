@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.drink.server.mapper.EmployeeMapper">
+
+    <select id="getByAccount" resultType="com.drink.server.entity.Employee">
+        SELECT id, name, account, password, phone, role, status, note, create_time
+        FROM employee WHERE account = #{account}
+    </select>
+
+    <select id="pageQuery" resultType="com.drink.server.entity.Employee">
+        SELECT id, name, account, phone, role, status, note, create_time
+        FROM employee
+        <where>
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="role != null and role != ''">
+                AND role = #{role}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM employee
+        <where>
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="role != null and role != ''">
+                AND role = #{role}
+            </if>
+        </where>
+    </select>
+
+    <select id="getById" resultType="com.drink.server.entity.Employee">
+        SELECT id, name, account, password, phone, role, status, note, create_time
+        FROM employee WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO employee (name, account, password, phone, role, status, note)
+        VALUES (#{name}, #{account}, #{password}, #{phone}, #{role}, #{status}, #{note})
+    </insert>
+
+    <update id="update">
+        UPDATE employee
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="account != null">account = #{account},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="role != null">role = #{role},</if>
+            <if test="note != null">note = #{note},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE employee SET status = #{status} WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM employee WHERE id = #{id}
+    </delete>
+
+</mapper>
