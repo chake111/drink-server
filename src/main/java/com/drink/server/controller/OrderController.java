@@ -65,6 +65,11 @@ public class OrderController {
         return Result.success("操作成功", null);
     }
 
+    @GetMapping("/order/pending-count")
+    public Result<Long> pendingCount() {
+        return Result.success(orderService.getPendingCount());
+    }
+
     // ==================== 用户端 ====================
 
     @PostMapping("/user/order")
