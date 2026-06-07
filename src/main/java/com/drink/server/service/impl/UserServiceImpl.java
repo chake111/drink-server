@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
             // 自动注册
             user = new User();
             user.setOpenid(account);
-            user.setNickname("用户" + account.substring(0, Math.min(20, account.length())));
+            user.setNickname(account.substring(0, Math.min(20, account.length())));
             user.setAvatar("");
             userMapper.insert(user);
         }
