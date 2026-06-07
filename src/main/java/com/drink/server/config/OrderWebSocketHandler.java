@@ -1,4 +1,4 @@
-package com.drink.server.websocket;
+package com.drink.server.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

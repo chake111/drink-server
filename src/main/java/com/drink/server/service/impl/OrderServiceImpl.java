@@ -11,7 +11,7 @@ import com.drink.server.mapper.DrinkMapper;
 import com.drink.server.mapper.OrderDetailMapper;
 import com.drink.server.mapper.OrderMapper;
 import com.drink.server.service.OrderService;
-import com.drink.server.websocket.OrderWebSocketHandler;
+import com.drink.server.config.OrderWebSocketHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

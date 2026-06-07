@@ -1,6 +1,5 @@
 package com.drink.server.config;
 
-import com.drink.server.websocket.OrderWebSocketHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
