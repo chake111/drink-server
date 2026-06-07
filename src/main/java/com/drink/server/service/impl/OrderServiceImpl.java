@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -29,9 +28,6 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final OrderDetailMapper orderDetailMapper;
     private final DrinkMapper drinkMapper;
-
-    /** 订单号自增序列（简化实现，生产环境建议用Redis或数据库序列） */
-    private static final AtomicInteger SEQ = new AtomicInteger(0);
 
     public OrderServiceImpl(OrderMapper orderMapper, OrderDetailMapper orderDetailMapper,
                             DrinkMapper drinkMapper) {
@@ -177,20 +173,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 生成订单号：年月日 + 3位自增序号
+     * 生成订单号：年月日时分秒 + 4位随机数
      */
     private String generateOrderNo() {
-        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        int seq = SEQ.incrementAndGet() % 1000;
-        return date + String.format("%03d", seq);
+        String dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        int random = (int) (Math.random() * 10000);
+        return dateTime + String.format("%04d", random);
     }
 
     /**
-     * 生成取餐号：字母 + 2位数字
+     * 生成取餐号：字母 + 2位随机数字
      */
     private String generatePickupNo() {
-        int seq = SEQ.get() % 100;
-        char letter = (char) ('A' + (SEQ.get() % 26));
-        return letter + String.format("%02d", seq);
+        char letter = (char) ('A' + (int) (Math.random() * 26));
+        int num = (int) (Math.random() * 100);
+        return letter + String.format("%02d", num);
     }
 }
