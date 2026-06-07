@@ -22,6 +22,8 @@ public class WebMvcInterceptorConfig implements WebMvcConfigurer {
                         "/api/admin/login",      // 管理端登录
                         "/api/user/login",       // 用户端登录
                         "/api/category/list",    // 分类列表（公开）
+                        "/api/user/drink/list",  // 饮品浏览（公开）
+                        "/api/user/drink/**",    // 饮品详情（公开）
                         "/api/upload/**",        // 静态资源
                         "/upload/**"             // 上传文件访问
                 );
