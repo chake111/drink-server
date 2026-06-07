@@ -3,7 +3,6 @@ package com.drink.server.service;
 import com.drink.server.common.PageResult;
 import com.drink.server.dto.DrinkPageQuery;
 import com.drink.server.entity.Drink;
-import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface DrinkService {
@@ -15,10 +14,10 @@ public interface DrinkService {
     Drink getById(Long id);
 
     /** 新增饮品 */
-    void add(Drink drink, MultipartFile image, String flavorsJson);
+    void add(Drink drink, String flavorsJson);
 
     /** 修改饮品 */
-    void update(Drink drink, MultipartFile image, String flavorsJson);
+    void update(Drink drink, String flavorsJson);
 
     /** 启售/停售 */
     void updateStatus(List<Long> ids, Integer status);

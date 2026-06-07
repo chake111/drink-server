@@ -11,16 +11,11 @@ import com.drink.server.mapper.DrinkMapper;
 import com.drink.server.service.DrinkService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -30,9 +25,6 @@ public class DrinkServiceImpl implements DrinkService {
     private final DrinkFlavorMapper drinkFlavorMapper;
     private final RedisUtil redisUtil;
     private final ObjectMapper objectMapper;
-
-    @Value("${drink.upload.path}")
-    private String uploadPath;
 
     public DrinkServiceImpl(DrinkMapper drinkMapper, DrinkFlavorMapper drinkFlavorMapper,
                             RedisUtil redisUtil, ObjectMapper objectMapper) {
@@ -69,12 +61,7 @@ public class DrinkServiceImpl implements DrinkService {
 
     @Override
     @Transactional
-    public void add(Drink drink, MultipartFile image, String flavorsJson) {
-        // 处理图片上传
-        if (image != null && !image.isEmpty()) {
-            String imageUrl = uploadFile(image);
-            drink.setImage(imageUrl);
-        }
+    public void add(Drink drink, String flavorsJson) {
         if (drink.getStatus() == null) {
             drink.setStatus(1);
         }
@@ -89,12 +76,7 @@ public class DrinkServiceImpl implements DrinkService {
 
     @Override
     @Transactional
-    public void update(Drink drink, MultipartFile image, String flavorsJson) {
-        // 处理图片上传（如果有新图片）
-        if (image != null && !image.isEmpty()) {
-            String imageUrl = uploadFile(image);
-            drink.setImage(imageUrl);
-        }
+    public void update(Drink drink, String flavorsJson) {
         drinkMapper.update(drink);
 
         // 更新口味：先删后增
@@ -166,29 +148,6 @@ public class DrinkServiceImpl implements DrinkService {
         }
 
         return drinks;
-    }
-
-    /**
-     * 上传文件到本地
-     */
-    private String uploadFile(MultipartFile file) {
-        String originalFilename = file.getOriginalFilename();
-        String extension = "";
-        if (originalFilename != null && originalFilename.contains(".")) {
-            extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-        }
-        String fileName = UUID.randomUUID().toString() + extension;
-
-        File dest = new File(uploadPath + fileName);
-        if (!dest.getParentFile().exists()) {
-            dest.getParentFile().mkdirs();
-        }
-        try {
-            file.transferTo(dest);
-        } catch (IOException e) {
-            throw new BusinessException("文件上传失败");
-        }
-        return "/upload/" + fileName;
     }
 
     /**

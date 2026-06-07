@@ -4,10 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/drink_order?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf-8
+    url: jdbc:mysql://localhost:3306/drink_order?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf-8&allowPublicKeyRetrieval=true
     username: root
-    # password: 123456  # 暂时注释，用户未提供密码
-    password:
+    password: 123456
   data:
     redis:
       host: localhost
@@ -31,5 +30,5 @@ jwt:
 # 文件上传配置
 drink:
   upload:
-    path: E:/upload/drink/
-    url-prefix: /upload/
+    path: src/main/resources/static/images/
+    url-prefix: /images/

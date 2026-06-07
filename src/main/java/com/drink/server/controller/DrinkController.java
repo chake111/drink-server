@@ -6,7 +6,6 @@ import com.drink.server.dto.DrinkPageQuery;
 import com.drink.server.entity.Drink;
 import com.drink.server.service.DrinkService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,15 +38,16 @@ public class DrinkController {
     public Result<Void> add(@RequestParam("name") String name,
                             @RequestParam("categoryId") Long categoryId,
                             @RequestParam("price") java.math.BigDecimal price,
-                            @RequestParam(value = "image", required = false) MultipartFile image,
+                            @RequestParam(value = "image", required = false) String image,
                             @RequestParam(value = "description", required = false) String description,
                             @RequestParam(value = "flavors", required = false) String flavors) {
         Drink drink = new Drink();
         drink.setName(name);
         drink.setCategoryId(categoryId);
         drink.setPrice(price);
+        drink.setImage(image);
         drink.setDescription(description);
-        drinkService.add(drink, image, flavors);
+        drinkService.add(drink, flavors);
         return Result.success("新增成功", null);
     }
 
@@ -56,7 +56,7 @@ public class DrinkController {
                                @RequestParam("name") String name,
                                @RequestParam("categoryId") Long categoryId,
                                @RequestParam("price") java.math.BigDecimal price,
-                               @RequestParam(value = "image", required = false) MultipartFile image,
+                               @RequestParam(value = "image", required = false) String image,
                                @RequestParam(value = "description", required = false) String description,
                                @RequestParam(value = "flavors", required = false) String flavors) {
         Drink drink = new Drink();
@@ -64,8 +64,9 @@ public class DrinkController {
         drink.setName(name);
         drink.setCategoryId(categoryId);
         drink.setPrice(price);
+        drink.setImage(image);
         drink.setDescription(description);
-        drinkService.update(drink, image, flavors);
+        drinkService.update(drink, flavors);
         return Result.success("修改成功", null);
     }
 
