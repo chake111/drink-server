@@ -33,6 +33,9 @@ public interface OrderMapper {
     /** 今日概览 */
     Map<String, Object> todayOverview();
 
+    /** 昨日概览（用于环比计算） */
+    Map<String, Object> yesterdayOverview();
+
     /** 近7日销售趋势 */
     List<Map<String, Object>> recentTrend();
 

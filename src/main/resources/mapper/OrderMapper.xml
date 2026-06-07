@@ -66,6 +66,16 @@
         WHERE DATE(create_time) = CURDATE()
     </select>
 
+    <select id="yesterdayOverview" resultType="java.util.Map">
+        SELECT
+            COUNT(*) AS yesterdayOrders,
+            IFNULL(SUM(amount), 0) AS yesterdayAmount,
+            SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) AS pendingOrders,
+            SUM(CASE WHEN status = 4 THEN 1 ELSE 0 END) AS completedOrders
+        FROM `order`
+        WHERE DATE(create_time) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+    </select>
+
     <select id="recentTrend" resultType="java.util.Map">
         SELECT
             DATE_FORMAT(create_time, '%m-%d') AS date,
