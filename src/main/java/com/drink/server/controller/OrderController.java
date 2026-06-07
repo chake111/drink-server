@@ -92,8 +92,11 @@ public class OrderController {
      * 从JWT中获取用户ID
      */
     private Long getUserId(HttpServletRequest request) {
-        String token = request.getHeader("Authorization").substring(7);
-        Claims claims = jwtUtil.parseToken(token);
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new com.drink.server.common.BusinessException("未登录");
+        }
+        Claims claims = jwtUtil.parseToken(authHeader.substring(7));
         return claims.get("id", Long.class);
     }
 }
