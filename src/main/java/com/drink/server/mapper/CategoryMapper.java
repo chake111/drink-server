@@ -19,4 +19,6 @@ public interface CategoryMapper {
     int deleteById(@Param("id") Long id);
 
     int updateStatus(@Param("id") Long id, @Param("status") Integer status);
+
+    int updateSort(@Param("id") Long id, @Param("sort") Integer sort);
 }

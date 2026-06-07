@@ -6,6 +6,7 @@ import com.drink.server.service.CategoryService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 饮品分类控制器（管理端）
@@ -47,5 +48,12 @@ public class CategoryController {
     public Result<Void> updateStatus(@PathVariable Integer status, @RequestParam Long id) {
         categoryService.updateStatus(id, status);
         return Result.success("操作成功", null);
+    }
+
+    @PutMapping("/sort")
+    public Result<Void> updateSort(@RequestBody Map<String, List<Long>> body) {
+        List<Long> ids = body.get("ids");
+        categoryService.updateSort(ids);
+        return Result.success("排序成功", null);
     }
 }

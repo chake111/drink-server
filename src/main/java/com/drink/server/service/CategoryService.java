@@ -14,4 +14,6 @@ public interface CategoryService {
     void delete(Long id);
 
     void updateStatus(Long id, Integer status);
+
+    void updateSort(List<Long> ids);
 }

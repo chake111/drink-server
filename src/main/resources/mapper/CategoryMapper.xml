@@ -38,4 +38,8 @@
         UPDATE category SET status = #{status} WHERE id = #{id}
     </update>
 
+    <update id="updateSort">
+        UPDATE category SET sort = #{sort} WHERE id = #{id}
+    </update>
+
 </mapper>
