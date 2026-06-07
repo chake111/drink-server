@@ -24,6 +24,9 @@ public class Order {
     /** 非数据库字段：用户名 */
     private String userName;
 
+    /** 非数据库字段：用户手机号 */
+    private String userPhone;
+
     /** 非数据库字段：订单明细 */
     private List<OrderDetail> details;
 }
