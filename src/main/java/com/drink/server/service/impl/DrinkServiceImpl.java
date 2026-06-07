@@ -91,7 +91,7 @@ public class DrinkServiceImpl implements DrinkService {
 
         // 清除旧分类缓存
         clearCategoryCache(old.getCategoryId());
-        // 如果分类变了，也清新分类缓存
+        // 如果分类变了，也清除新分类缓存
         if (drink.getCategoryId() != null && !drink.getCategoryId().equals(old.getCategoryId())) {
             clearCategoryCache(drink.getCategoryId());
         }
