@@ -38,14 +38,14 @@ public class DashboardServiceImpl implements DashboardService {
         return today;
     }
 
-    /** 计算环比百分比：(今-昨)/昨*100，昨日为0时返回0 */
+    /** 计算环比百分比：(今-昨)/昨*100，昨日为0时若今日有数据返回100% */
     private int calcChange(long today, long yesterday) {
-        if (yesterday == 0) return 0;
+        if (yesterday == 0) return today > 0 ? 100 : 0;
         return (int) Math.round((today - yesterday) * 100.0 / yesterday);
     }
 
     private int calcChange(double today, double yesterday) {
-        if (yesterday == 0) return 0;
+        if (yesterday == 0) return today > 0 ? 100 : 0;
         return (int) Math.round((today - yesterday) * 100.0 / yesterday);
     }
 
