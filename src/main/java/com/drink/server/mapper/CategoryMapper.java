@@ -21,4 +21,6 @@ public interface CategoryMapper {
     int updateStatus(@Param("id") Long id, @Param("status") Integer status);
 
     int updateSort(@Param("id") Long id, @Param("sort") Integer sort);
+
+    Integer maxSort();
 }

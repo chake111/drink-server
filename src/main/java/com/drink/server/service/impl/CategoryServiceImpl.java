@@ -35,7 +35,8 @@ public class CategoryServiceImpl implements CategoryService {
             category.setStatus(1);
         }
         if (category.getSort() == null) {
-            category.setSort(0);
+            Integer maxSort = categoryMapper.maxSort();
+            category.setSort(maxSort == null ? 0 : maxSort + 1);
         }
         categoryMapper.insert(category);
     }
