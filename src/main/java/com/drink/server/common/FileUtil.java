@@ -60,7 +60,7 @@ public class FileUtil {
      * @throws BusinessException 保存失败时抛出
      */
     public static void saveFile(MultipartFile file, String destPath) {
-        File dest = new File(destPath);
+        File dest = new File(destPath).getAbsoluteFile();
         if (!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();
         }

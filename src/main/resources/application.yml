@@ -30,5 +30,5 @@ jwt:
 # 文件上传配置
 drink:
   upload:
-    path: src/main/resources/static/images/
+    path: ./upload/
     url-prefix: /images/
