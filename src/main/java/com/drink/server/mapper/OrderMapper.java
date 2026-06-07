@@ -44,4 +44,7 @@ public interface OrderMapper {
 
     /** 热销TOP5 */
     List<Map<String, Object>> topDrinks();
+
+    /** 统计指定状态的订单数 */
+    long countByStatus(@Param("status") int status);
 }

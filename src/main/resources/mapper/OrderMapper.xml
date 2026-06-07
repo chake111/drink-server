@@ -109,4 +109,8 @@
         LIMIT 5
     </select>
 
+    <select id="countByStatus" resultType="long">
+        SELECT COUNT(*) FROM `order` WHERE status = #{status}
+    </select>
+
 </mapper>
