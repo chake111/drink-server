@@ -4,9 +4,15 @@
 <mapper namespace="com.drink.server.mapper.CategoryMapper">
 
     <select id="list" resultType="com.drink.server.entity.Category">
-        SELECT id, name, icon, sort, status, create_time, update_time
-        FROM category
-        ORDER BY sort ASC, id ASC
+        SELECT c.id, c.name, c.icon, c.sort, c.status, c.create_time, c.update_time,
+               IFNULL(dc.drink_count, 0) AS drink_count
+        FROM category c
+        LEFT JOIN (
+            SELECT category_id, COUNT(*) AS drink_count
+            FROM drink
+            GROUP BY category_id
+        ) dc ON dc.category_id = c.id
+        ORDER BY c.sort ASC, c.id ASC
     </select>
 
     <select id="getById" resultType="com.drink.server.entity.Category">
