@@ -69,8 +69,8 @@
         SELECT
             COUNT(*) AS todayOrders,
             IFNULL(SUM(amount), 0) AS todayAmount,
-            SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) AS pendingOrders,
-            SUM(CASE WHEN status = 4 THEN 1 ELSE 0 END) AS completedOrders
+            IFNULL(SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END), 0) AS pendingOrders,
+            IFNULL(SUM(CASE WHEN status = 4 THEN 1 ELSE 0 END), 0) AS completedOrders
         FROM `order`
         WHERE DATE(create_time) = CURDATE()
           AND status != 5
@@ -80,8 +80,8 @@
         SELECT
             COUNT(*) AS yesterdayOrders,
             IFNULL(SUM(amount), 0) AS yesterdayAmount,
-            SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) AS pendingOrders,
-            SUM(CASE WHEN status = 4 THEN 1 ELSE 0 END) AS completedOrders
+            IFNULL(SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END), 0) AS pendingOrders,
+            IFNULL(SUM(CASE WHEN status = 4 THEN 1 ELSE 0 END), 0) AS completedOrders
         FROM `order`
         WHERE DATE(create_time) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
           AND status != 5
