@@ -121,6 +121,7 @@ public class OrderServiceImpl implements OrderService {
             OrderDetail detail = new OrderDetail();
             detail.setDrinkId(drink.getId());
             detail.setDrinkName(drink.getName());
+            detail.setImage(drink.getImage());
             detail.setSpec(item.getSpec());
             detail.setQuantity(item.getQuantity());
             detail.setPrice(drink.getPrice());

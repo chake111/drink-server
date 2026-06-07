@@ -4,15 +4,15 @@
 <mapper namespace="com.drink.server.mapper.OrderDetailMapper">
 
     <select id="listByOrderId" resultType="com.drink.server.entity.OrderDetail">
-        SELECT id, order_id, drink_id, drink_name, spec, quantity, price
+        SELECT id, order_id, drink_id, drink_name, image, spec, quantity, price
         FROM order_detail
         WHERE order_id = #{orderId}
     </select>
 
     <insert id="insertBatch">
-        INSERT INTO order_detail (order_id, drink_id, drink_name, spec, quantity, price) VALUES
+        INSERT INTO order_detail (order_id, drink_id, drink_name, image, spec, quantity, price) VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.orderId}, #{item.drinkId}, #{item.drinkName}, #{item.spec}, #{item.quantity}, #{item.price})
+            (#{item.orderId}, #{item.drinkId}, #{item.drinkName}, #{item.image}, #{item.spec}, #{item.quantity}, #{item.price})
         </foreach>
     </insert>
 

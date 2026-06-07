@@ -12,6 +12,7 @@ public class OrderDetail {
     private Long orderId;
     private Long drinkId;
     private String drinkName;
+    private String image;
     private String spec;
     private Integer quantity;
     private BigDecimal price;

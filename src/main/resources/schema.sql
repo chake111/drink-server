@@ -73,6 +73,7 @@ CREATE TABLE IF NOT EXISTS `order_detail` (
     `order_id` BIGINT NOT NULL COMMENT '订单ID',
     `drink_id` BIGINT NOT NULL COMMENT '饮品ID',
     `drink_name` VARCHAR(64) NOT NULL COMMENT '饮品名称',
+    `image` VARCHAR(256) DEFAULT NULL COMMENT '饮品图片URL',
     `spec` VARCHAR(32) DEFAULT NULL COMMENT '规格',
     `quantity` INT NOT NULL DEFAULT 1 COMMENT '数量',
     `price` DECIMAL(10,2) NOT NULL COMMENT '单价',
