@@ -97,7 +97,7 @@ public class OrderServiceImpl implements OrderService {
         if (order == null || order.getStatus() != 1) {
             throw new BusinessException("订单状态异常");
         }
-        orderMapper.updateStatus(id, 5);
+        orderMapper.reject(id, 5, reason);
     }
 
     @Override

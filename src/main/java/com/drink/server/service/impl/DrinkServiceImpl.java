@@ -77,18 +77,22 @@ public class DrinkServiceImpl implements DrinkService {
     @Override
     @Transactional
     public void update(Drink drink, String flavorsJson) {
+        // 先查旧记录，用于清除旧分类缓存
+        Drink old = drinkMapper.getById(drink.getId());
+        if (old == null) {
+            throw new BusinessException("饮品不存在");
+        }
+
         drinkMapper.update(drink);
 
         // 更新口味：先删后增
         drinkFlavorMapper.deleteByDrinkId(drink.getId());
         saveFlavors(drink.getId(), flavorsJson);
 
-        // 清除缓存
-        Drink old = drinkMapper.getById(drink.getId());
-        if (old != null) {
-            clearCategoryCache(old.getCategoryId());
-        }
-        if (drink.getCategoryId() != null) {
+        // 清除旧分类缓存
+        clearCategoryCache(old.getCategoryId());
+        // 如果分类变了，也清新分类缓存
+        if (drink.getCategoryId() != null && !drink.getCategoryId().equals(old.getCategoryId())) {
             clearCategoryCache(drink.getCategoryId());
         }
     }

@@ -33,7 +33,7 @@
     </select>
 
     <select id="getById" resultType="com.drink.server.entity.Order">
-        SELECT id, user_id, order_no, amount, status, pickup_type, pickup_no, create_time
+        SELECT id, user_id, order_no, amount, status, pickup_type, pickup_no, reject_reason, create_time
         FROM `order` WHERE id = #{id}
     </select>
 
@@ -46,8 +46,12 @@
         UPDATE `order` SET status = #{status} WHERE id = #{id}
     </update>
 
+    <update id="reject">
+        UPDATE `order` SET status = #{status}, reject_reason = #{rejectReason} WHERE id = #{id}
+    </update>
+
     <select id="listByUserId" resultType="com.drink.server.entity.Order">
-        SELECT id, user_id, order_no, amount, status, pickup_type, pickup_no, create_time
+        SELECT id, user_id, order_no, amount, status, pickup_type, pickup_no, reject_reason, create_time
         FROM `order`
         WHERE user_id = #{userId}
         <if test="status != null">
@@ -64,6 +68,7 @@
             SUM(CASE WHEN status = 4 THEN 1 ELSE 0 END) AS completedOrders
         FROM `order`
         WHERE DATE(create_time) = CURDATE()
+          AND status != 5
     </select>
 
     <select id="yesterdayOverview" resultType="java.util.Map">
@@ -74,6 +79,7 @@
             SUM(CASE WHEN status = 4 THEN 1 ELSE 0 END) AS completedOrders
         FROM `order`
         WHERE DATE(create_time) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+          AND status != 5
     </select>
 
     <select id="recentTrend" resultType="java.util.Map">

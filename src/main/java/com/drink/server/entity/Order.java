@@ -18,6 +18,7 @@ public class Order {
     private Integer status;
     private String pickupType;
     private String pickupNo;
+    private String rejectReason;
     private LocalDateTime createTime;
 
     /** 非数据库字段：用户名 */

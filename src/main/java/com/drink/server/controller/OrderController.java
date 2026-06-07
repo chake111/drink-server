@@ -61,7 +61,7 @@ public class OrderController {
 
     @PostMapping("/order/reject/{id}")
     public Result<Void> reject(@PathVariable Long id, @RequestBody Map<String, String> body) {
-        orderService.reject(id, body.get("rejectReason"));
+        orderService.reject(id, body.getOrDefault("rejectReason", ""));
         return Result.success("操作成功", null);
     }
 

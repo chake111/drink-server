@@ -27,6 +27,9 @@ public interface OrderMapper {
     /** 更新状态 */
     int updateStatus(@Param("id") Long id, @Param("status") Integer status);
 
+    /** 拒单（含原因） */
+    int reject(@Param("id") Long id, @Param("status") Integer status, @Param("rejectReason") String rejectReason);
+
     /** 用户端：按用户ID查询订单列表 */
     List<Order> listByUserId(@Param("userId") Long userId, @Param("status") Integer status);
 
