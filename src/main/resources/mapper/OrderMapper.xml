@@ -69,7 +69,9 @@
         SELECT
             COUNT(*) AS todayOrders,
             IFNULL(SUM(amount), 0) AS todayAmount,
-            IFNULL(SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END), 0) AS pendingOrders,
+            IFNULL(SUM(CASE WHEN status IN (1, 2) THEN 1 ELSE 0 END), 0) AS pendingOrders,
+            IFNULL(SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END), 0) AS waitingOrders,
+            IFNULL(SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END), 0) AS makingOrders,
             IFNULL(SUM(CASE WHEN status = 4 THEN 1 ELSE 0 END), 0) AS completedOrders
         FROM `order`
         WHERE DATE(create_time) = CURDATE()
