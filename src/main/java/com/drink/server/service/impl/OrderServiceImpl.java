@@ -11,6 +11,8 @@ import com.drink.server.mapper.DrinkMapper;
 import com.drink.server.mapper.OrderDetailMapper;
 import com.drink.server.mapper.OrderMapper;
 import com.drink.server.service.OrderService;
+import com.drink.server.websocket.OrderWebSocketHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,18 +24,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
 
     private final OrderMapper orderMapper;
     private final OrderDetailMapper orderDetailMapper;
     private final DrinkMapper drinkMapper;
+    private final OrderWebSocketHandler webSocketHandler;
 
     public OrderServiceImpl(OrderMapper orderMapper, OrderDetailMapper orderDetailMapper,
-                            DrinkMapper drinkMapper) {
+                            DrinkMapper drinkMapper, OrderWebSocketHandler webSocketHandler) {
         this.orderMapper = orderMapper;
         this.orderDetailMapper = orderDetailMapper;
         this.drinkMapper = drinkMapper;
+        this.webSocketHandler = webSocketHandler;
     }
 
     @Override
@@ -67,6 +72,7 @@ public class OrderServiceImpl implements OrderService {
             throw new BusinessException("订单状态异常");
         }
         orderMapper.updateStatus(id, 2);
+        broadcast();
     }
 
     @Override
@@ -94,6 +100,7 @@ public class OrderServiceImpl implements OrderService {
             throw new BusinessException("订单状态异常");
         }
         orderMapper.reject(id, 5, reason);
+        broadcast();
     }
 
     @Override
@@ -145,6 +152,7 @@ public class OrderServiceImpl implements OrderService {
         Map<String, Object> result = new HashMap<>();
         result.put("orderNo", orderNo);
         result.put("amount", totalAmount);
+        broadcast();
         return result;
     }
 
@@ -170,6 +178,24 @@ public class OrderServiceImpl implements OrderService {
             throw new BusinessException("仅待接单状态可取消");
         }
         orderMapper.updateStatus(orderId, 5);
+        broadcast();
+    }
+
+    @Override
+    public long getPendingCount() {
+        return orderMapper.countByStatus(1);
+    }
+
+    /**
+     * 广播待接单数量给管理端
+     */
+    private void broadcast() {
+        try {
+            long count = orderMapper.countByStatus(1);
+            webSocketHandler.broadcastPendingCount(count);
+        } catch (Exception e) {
+            log.warn("广播待接单数量失败: {}", e.getMessage());
+        }
     }
 
     /**

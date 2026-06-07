@@ -35,4 +35,7 @@ public interface OrderService {
 
     /** 用户端取消订单 */
     void cancel(Long userId, Long orderId);
+
+    /** 获取待接单数量 */
+    long getPendingCount();
 }
